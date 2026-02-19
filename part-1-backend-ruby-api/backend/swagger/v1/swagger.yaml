@@ -1,0 +1,707 @@
+openapi: 3.0.3
+info:
+  title: Backend API
+  version: v1
+  description: API for companies, onboarding, products, sales, and sync status.
+
+paths:
+  /api/v1/companies:
+    get:
+      summary: List companies
+      tags: [Companies]
+      responses:
+        '200':
+          description: List of companies
+    post:
+      summary: Create company
+      tags: [Companies]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInput'
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Validation error
+
+  /api/v1/companies/{id}:
+    get:
+      summary: Get company
+      tags: [Companies]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update company
+      tags: [Companies]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete company
+      tags: [Companies]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+        '404': { description: Not found }
+
+  /api/v1/onboarding_steps:
+    get:
+      summary: List onboarding steps
+      tags: [Onboarding Steps]
+      responses:
+        '200': { description: List of onboarding steps }
+    post:
+      summary: Create onboarding step
+      tags: [Onboarding Steps]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingStepInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/onboarding_steps/{id}:
+    get:
+      summary: Get onboarding step
+      tags: [Onboarding Steps]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update onboarding step
+      tags: [Onboarding Steps]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingStepInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete onboarding step
+      tags: [Onboarding Steps]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/onboarding_processes:
+    get:
+      summary: List onboarding processes
+      tags: [Onboarding Processes]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of onboarding processes }
+    post:
+      summary: Create onboarding process
+      tags: [Onboarding Processes]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingProcessInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/onboarding_processes/{id}:
+    get:
+      summary: Get onboarding process
+      tags: [Onboarding Processes]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update onboarding process
+      tags: [Onboarding Processes]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingProcessInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete onboarding process
+      tags: [Onboarding Processes]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/onboarding_step_submissions:
+    get:
+      summary: List onboarding step submissions
+      tags: [Onboarding Step Submissions]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: step_id
+          in: query
+          schema: { type: integer }
+      responses:
+        '200': { description: List of submissions }
+    post:
+      summary: Create onboarding step submission
+      tags: [Onboarding Step Submissions]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingStepSubmissionInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/onboarding_step_submissions/{id}:
+    get:
+      summary: Get onboarding step submission
+      tags: [Onboarding Step Submissions]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update onboarding step submission
+      tags: [Onboarding Step Submissions]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingStepSubmissionInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete onboarding step submission
+      tags: [Onboarding Step Submissions]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/vendors:
+    get:
+      summary: List vendors
+      tags: [Vendors]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of vendors }
+    post:
+      summary: Create vendor
+      tags: [Vendors]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/vendors/{id}:
+    get:
+      summary: Get vendor
+      tags: [Vendors]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update vendor
+      tags: [Vendors]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete vendor
+      tags: [Vendors]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/warehouses:
+    get:
+      summary: List warehouses
+      tags: [Warehouses]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of warehouses }
+    post:
+      summary: Create warehouse
+      tags: [Warehouses]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/warehouses/{id}:
+    get:
+      summary: Get warehouse
+      tags: [Warehouses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update warehouse
+      tags: [Warehouses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete warehouse
+      tags: [Warehouses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/products:
+    get:
+      summary: List products
+      tags: [Products]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: vendor_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of products }
+    post:
+      summary: Create product
+      tags: [Products]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/products/{id}:
+    get:
+      summary: Get product (by sku_id)
+      tags: [Products]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update product
+      tags: [Products]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete product
+      tags: [Products]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/sales_history:
+    get:
+      summary: List sales history
+      tags: [Sales History]
+      parameters:
+        - name: product_sku
+          in: query
+          schema: { type: string }
+      responses:
+        '200': { description: List of sales history records }
+    post:
+      summary: Create sales history record
+      tags: [Sales History]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesHistoryInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/sales_history/{id}:
+    get:
+      summary: Get sales history record
+      tags: [Sales History]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update sales history record
+      tags: [Sales History]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesHistoryInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete sales history record
+      tags: [Sales History]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/sync_statuses:
+    get:
+      summary: List sync statuses
+      tags: [Sync Statuses]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of sync statuses }
+    post:
+      summary: Create sync status
+      tags: [Sync Statuses]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncStatusInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/sync_statuses/{id}:
+    get:
+      summary: Get sync status
+      tags: [Sync Statuses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update sync status
+      tags: [Sync Statuses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncStatusInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete sync status
+      tags: [Sync Statuses]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+  /api/v1/users:
+    get:
+      summary: List users
+      tags: [Users]
+      parameters:
+        - name: company_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: List of users }
+    post:
+      summary: Create user
+      tags: [Users]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201': { description: Created }
+        '422': { description: Validation error }
+
+  /api/v1/users/{id}:
+    get:
+      summary: Get user
+      tags: [Users]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+    put:
+      summary: Update user
+      tags: [Users]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200': { description: OK }
+        '422': { description: Validation error }
+    delete:
+      summary: Delete user
+      tags: [Users]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No content }
+
+components:
+  schemas:
+    CompanyInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+
+    OnboardingStepInput:
+      type: object
+      properties:
+        title: { type: string }
+        slug: { type: string }
+        sort_order: { type: integer }
+        category: { type: string }
+        is_active: { type: boolean }
+        is_mandatory: { type: boolean }
+        dependency_step_id: { type: integer, nullable: true }
+
+    OnboardingProcessInput:
+      type: object
+      properties:
+        company_id: { type: string, format: uuid }
+        current_step_id: { type: integer, nullable: true }
+
+    OnboardingStepSubmissionInput:
+      type: object
+      properties:
+        company_id: { type: string, format: uuid }
+        step_id: { type: integer }
+        status: { type: string, enum: [started, completed, skipped] }
+        values: { type: object }
+        completed_at: { type: string, format: date-time, nullable: true }
+
+    VendorInput:
+      type: object
+      required: [company_id, name]
+      properties:
+        company_id: { type: string, format: uuid }
+        name: { type: string }
+        contact_info: { type: object }
+
+    WarehouseInput:
+      type: object
+      required: [company_id, name]
+      properties:
+        company_id: { type: string, format: uuid }
+        name: { type: string }
+        address: { type: string }
+
+    ProductInput:
+      type: object
+      required: [sku_id, company_id, vendor_id, name]
+      properties:
+        sku_id: { type: string }
+        company_id: { type: string, format: uuid }
+        vendor_id: { type: string, format: uuid }
+        name: { type: string }
+        lead_time_days: { type: integer, nullable: true }
+        days_of_stock: { type: integer, nullable: true }
+        forecasting_days: { type: integer, nullable: true }
+
+    SalesHistoryInput:
+      type: object
+      required: [product_sku, sale_date, quantity]
+      properties:
+        product_sku: { type: string }
+        sale_date: { type: string, format: date }
+        quantity: { type: integer }
+
+    SyncStatusInput:
+      type: object
+      required: [company_id, entity_type]
+      properties:
+        company_id: { type: string, format: uuid }
+        entity_type: { type: string }
+        total_count: { type: integer }
+        synced_count: { type: integer }
+        is_finished: { type: boolean }
+
+    UserInput:
+      type: object
+      required: [company_id, email, role]
+      properties:
+        company_id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        role: { type: string, enum: [admin, planner] }

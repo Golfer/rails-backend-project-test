@@ -1,0 +1,38 @@
+# RuboCop configuration — inherits Rails Omakase style, adds project overrides.
+# Run: bundle exec rubocop [paths]
+# Auto-fix safe issues: bundle exec rubocop -a
+
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+# Project-wide settings
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  CacheRootDirectory: .rubocop_cache
+  Exclude:
+    - "bin/*"
+    - "db/schema.rb"
+    - "db/migrate/*"
+    - "node_modules/**/*"
+    - "vendor/**/*"
+
+# RSpec (specs) — use same style as app code
+plugins: rubocop-rspec
+
+RSpec/ExampleLength:
+  Max: 15
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+# Relax some cops that often conflict with API/spec patterns
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 120
+
+# Optional: uncomment to customize further
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: false

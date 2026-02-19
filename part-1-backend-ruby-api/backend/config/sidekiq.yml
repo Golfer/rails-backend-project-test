@@ -1,0 +1,5 @@
+# Sidekiq configuration
+:concurrency: 5
+
+:queues:
+  - default
