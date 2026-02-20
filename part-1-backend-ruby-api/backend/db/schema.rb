@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_19_000011) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_19_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -49,6 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_000011) do
     t.boolean "is_active", default: false, null: false
     t.boolean "is_mandatory", default: true, null: false
     t.bigint "dependency_step_id"
+    t.string "required_sync_entity"
     t.index ["dependency_step_id"], name: "index_onboarding_steps_on_dependency_step_id"
     t.index ["slug"], name: "index_onboarding_steps_on_slug", unique: true
   end

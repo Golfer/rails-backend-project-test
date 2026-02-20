@@ -27,4 +27,24 @@ RSpec.describe OnboardingStepSubmission, type: :model do
       expect(duplicate).not_to be_valid
     end
   end
+
+  describe "completion side effects" do
+    it "enqueues OnboardingStepCompletedWorker when status transitions to completed" do
+      submission = create(:onboarding_step_submission, status: "started")
+      allow(OnboardingStepCompletedWorker).to receive(:perform_async).and_return("jid")
+
+      submission.update!(status: "completed")
+
+      expect(OnboardingStepCompletedWorker).to have_received(:perform_async).with(submission.id)
+    end
+
+    it "does not enqueue when status is updated but not to completed" do
+      submission = create(:onboarding_step_submission, status: "started")
+      allow(OnboardingStepCompletedWorker).to receive(:perform_async)
+
+      submission.update!(status: "skipped")
+
+      expect(OnboardingStepCompletedWorker).not_to have_received(:perform_async)
+    end
+  end
 end

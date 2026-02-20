@@ -29,3 +29,11 @@
 
 en:
   hello: "Hello world"
+
+  onboarding_mailer:
+    step_completed_notification:
+      subject: "Changes applied: %{step_title} – %{company_name}"
+      greeting: "Your onboarding step has been completed and the related changes have been applied."
+      step_label: "Step"
+      company_label: "Company"
+      footer: "You can continue onboarding or review your settings in the app."

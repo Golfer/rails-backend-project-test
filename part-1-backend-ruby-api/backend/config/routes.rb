@@ -3,9 +3,13 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :companies
+      resources :companies do
+        resource :current_onboarding_step, only: [ :show ], module: :companies
+        resource :sync_progress, only: [ :show ], module: :companies, controller: "sync_progress"
+        resources :onboarding_step_statuses, only: [ :index ], module: :companies
+      end
       resources :onboarding_steps
       resources :onboarding_processes
       resources :onboarding_step_submissions
