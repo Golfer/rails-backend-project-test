@@ -5,5 +5,7 @@ FactoryBot.define do
     association :company
     email { Faker::Internet.unique.email }
     role { %w[admin planner].sample }
+    password { "password123" }
+    password_confirmation { "password123" }
   end
 end

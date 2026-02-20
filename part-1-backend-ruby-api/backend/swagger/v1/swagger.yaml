@@ -2,9 +2,85 @@ openapi: 3.0.3
 info:
   title: Backend API
   version: v1
-  description: API for companies, onboarding, products, sales, and sync status.
+  description: |
+    API for companies, onboarding, products, sales, and sync status.
+    Auth is email/password; use the token from register or login in the Authorization header for protected endpoints (e.g. GET /api/v1/auth/me).
 
 paths:
+  /api/v1/auth/register:
+    post:
+      summary: Register (sign up)
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors: { type: array, items: { type: string } }
+
+  /api/v1/auth/login:
+    post:
+      summary: Login (sign in)
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: { type: string }
+
+  /api/v1/auth/me:
+    get:
+      summary: Current user (requires auth)
+      tags: [Auth]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublic'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: { type: string }
+
   /api/v1/companies:
     get:
       summary: List companies
@@ -619,7 +695,50 @@ paths:
         '204': { description: No content }
 
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT from register or login response
+
   schemas:
+    RegisterInput:
+      type: object
+      required: [user]
+      properties:
+        user:
+          type: object
+          required: [company_id, email, password, password_confirmation, role]
+          properties:
+            company_id: { type: string, format: uuid }
+            email: { type: string, format: email }
+            password: { type: string, minLength: 8 }
+            password_confirmation: { type: string }
+            role: { type: string, enum: [admin, planner] }
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserPublic'
+        token: { type: string, description: "JWT for Authorization header" }
+
+    UserPublic:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string }
+        role: { type: string }
+        company_id: { type: string, format: uuid }
+
     CompanyInput:
       type: object
       required: [name]
@@ -705,3 +824,5 @@ components:
         company_id: { type: string, format: uuid }
         email: { type: string, format: email }
         role: { type: string, enum: [admin, planner] }
+        password: { type: string, minLength: 8 }
+        password_confirmation: { type: string }

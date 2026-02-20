@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# Runs side effects when an onboarding step is completed.
-# Register step slug => handler (callable or class with .call(company, submission)).
 class OnboardingStepCompletionHandler
   HANDLERS = {
     "lead_time" => ->(company, submission) { LeadTimeUpdater.new(company, submission.values).call },

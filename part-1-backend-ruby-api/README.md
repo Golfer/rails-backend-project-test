@@ -32,17 +32,17 @@ Services:
 All endpoints are under **`/api/v1/`**:
 
 | Resource | Path |
-|----------|------|
-| Companies | `/api/v1/companies` |
-| Onboarding steps | `/api/v1/onboarding_steps` |
-| Onboarding processes | `/api/v1/onboarding_processes` |
-| Onboarding step submissions | `/api/v1/onboarding_step_submissions` |
-| Vendors | `/api/v1/vendors` |
-| Warehouses | `/api/v1/warehouses` |
-| Products | `/api/v1/products` |
-| Sales history | `/api/v1/sales_history` |
-| Sync statuses | `/api/v1/sync_statuses` |
-| Users | `/api/v1/users` |
+|-------------------------------|------|
+| Companies                     | `/api/v1/companies` |
+| Onboarding steps              | `/api/v1/onboarding_steps` |
+| Onboarding processes          | `/api/v1/onboarding_processes` |
+| Onboarding step submissions   | `/api/v1/onboarding_step_submissions` |
+| Vendors                       | `/api/v1/vendors`   |
+| Warehouses                    | `/api/v1/warehouses` |
+| Products                      | `/api/v1/products` |
+| Sales history                 | `/api/v1/sales_history` |
+| Sync statuses                 | `/api/v1/sync_statuses` |
+| Users                         | `/api/v1/users` |
 
 Standard REST: `GET` (index/show), `POST`, `PUT`, `DELETE`. Filtering via query params where applicable (e.g. `?company_id=`, `?vendor_id=`).
 

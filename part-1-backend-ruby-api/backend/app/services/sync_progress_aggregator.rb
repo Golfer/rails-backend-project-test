@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# Aggregates sync progress from all registered fetchers for a company.
-# Add new fetchers to FETCHERS to expose them in the sync progress API.
+
 class SyncProgressAggregator
   FETCHERS = {
     "Product" => ProductFetcher,

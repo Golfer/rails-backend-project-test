@@ -13,7 +13,6 @@ class RefreshCalculationsWorker
   private
 
   def refresh_forecasting_days(product)
-    # Placeholder: update forecasting_days from onboarding or other business logic
     product.update_column(:forecasting_days, product.forecasting_days) if product.forecasting_days.present?
   end
 end

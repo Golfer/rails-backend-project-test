@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_19_100000) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_19_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -86,6 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_100000) do
     t.uuid "company_id", null: false
     t.string "email", null: false
     t.string "role", null: false
+    t.string "password_digest"
     t.index ["company_id", "email"], name: "index_users_on_company_id_and_email", unique: true
     t.index ["company_id"], name: "index_users_on_company_id"
   end

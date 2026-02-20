@@ -7,12 +7,16 @@ module RequestHelpers
     JSON.parse(response.body)
   end
 
-  def api_headers
+  def api_headers(extra = {})
     {
       "CONTENT_TYPE" => "application/json",
       "ACCEPT" => "application/json",
       "HTTP_HOST" => REQUEST_SPEC_HOST
-    }
+    }.merge(extra)
+  end
+
+  def auth_headers(user)
+    api_headers("Authorization" => "Bearer #{JwtAuthenticatable.encode(user)}")
   end
 
   def request_url(path)

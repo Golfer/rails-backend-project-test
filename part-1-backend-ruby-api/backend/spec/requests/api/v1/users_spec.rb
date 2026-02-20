@@ -44,7 +44,7 @@ RSpec.describe "Api::V1::Users", type: :request do
   describe "POST /api/v1/users" do
     it "creates a user" do
       company = create(:company)
-      params = { user: { company_id: company.id, email: "planner@example.com", role: "planner" } }
+      params = { user: { company_id: company.id, email: "planner@example.com", role: "planner", password: "password123", password_confirmation: "password123" } }
       expect { api_post(base_path, params) }.to change(User, :count).by(1)
       expect(response).to have_http_status(:created)
       expect(json_response["email"]).to eq("planner@example.com")

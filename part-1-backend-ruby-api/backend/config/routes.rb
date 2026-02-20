@@ -5,6 +5,12 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      namespace :auth do
+        post :register, to: "registrations#create"
+        post :login, to: "sessions#create"
+        get :me, to: "me#show"
+      end
+
       resources :companies do
         resource :current_onboarding_step, only: [ :show ], module: :companies
         resource :sync_progress, only: [ :show ], module: :companies, controller: "sync_progress"

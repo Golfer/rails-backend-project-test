@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# Runs onboarding step completion side effects in the background, then notifies by email.
-# Enqueued when an OnboardingStepSubmission transitions to "completed".
 class OnboardingStepCompletedWorker
   include Sidekiq::Job
 
