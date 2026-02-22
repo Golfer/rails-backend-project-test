@@ -46,6 +46,25 @@ All endpoints are under **`/api/v1/`**:
 
 Standard REST: `GET` (index/show), `POST`, `PUT`, `DELETE`. Filtering via query params where applicable (e.g. `?company_id=`, `?vendor_id=`).
 
+## Testing the API in dev
+
+- **Postman** – Import the collection **`postman/Backend-API.postman_collection.json`** to run sample requests against the running API. Set `baseUrl` to `http://localhost:3000` and use **Auth > Register (new company)** then set the returned `token` in the collection variables. See **`postman/README.md`** for details.
+- **Swagger UI** – With the backend running, open **http://localhost:3000/api-docs** to try endpoints from the browser (authorize with the JWT from register or login).
+
+## Running tests (Docker)
+
+From the repo root. The Compose service name is **`backend`** (not the project name):
+
+```bash
+# Prepare test DB (first time or after schema changes)
+docker compose run --rm -e RAILS_ENV=test backend bundle exec rails db:prepare
+
+# Run specs
+docker compose run --rm -e RAILS_ENV=test backend bundle exec rspec
+```
+
+Or use the Makefile: `make test` (and `make test-db` to prepare the test database).
+
 ## Backend (without Docker)
 
 See **`backend/README.md`** for running the Rails app locally with PostgreSQL and Redis.
