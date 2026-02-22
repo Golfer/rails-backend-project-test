@@ -143,6 +143,81 @@ paths:
         '204': { description: No content }
         '404': { description: Not found }
 
+  /api/v1/companies/{company_id}/current_onboarding_step:
+    get:
+      summary: Current onboarding step for company (resume step)
+      tags: [Companies]
+      parameters:
+        - name: company_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Current step the user should see
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: integer }
+                  title: { type: string }
+                  slug: { type: string }
+                  sort_order: { type: integer }
+                  category: { type: string, nullable: true }
+                  is_active: { type: boolean }
+                  is_mandatory: { type: boolean }
+                  dependency_step_id: { type: integer, nullable: true }
+                  required_sync_entity: { type: string, nullable: true }
+        '404':
+          description: No onboarding steps defined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+
+  /api/v1/companies/{company_id}/sync_progress:
+    get:
+      summary: Aggregated sync progress for company
+      tags: [Companies]
+      parameters:
+        - name: company_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: List of sync progress per entity type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  syncs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entity_type: { type: string }
+                        total_count: { type: integer }
+                        synced_count: { type: integer }
+                        is_finished: { type: boolean }
+
+  /api/v1/companies/{company_id}/onboarding_step_statuses:
+    get:
+      summary: List onboarding step definitions (for sidebar/progress)
+      tags: [Companies]
+      parameters:
+        - name: company_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: List of onboarding steps in sort order
+
   /api/v1/onboarding_steps:
     get:
       summary: List onboarding steps
@@ -706,12 +781,16 @@ components:
     RegisterInput:
       type: object
       required: [user]
+      description: |
+        Provide either company_id (existing company) or company_name (creates a new company).
+        No auth required.
       properties:
         user:
           type: object
-          required: [company_id, email, password, password_confirmation, role]
+          required: [email, password, password_confirmation, role]
           properties:
-            company_id: { type: string, format: uuid }
+            company_id: { type: string, format: uuid, description: "Existing company (use when inviting user to existing company)" }
+            company_name: { type: string, description: "Create new company with this name (use for first user / sign up)" }
             email: { type: string, format: email }
             password: { type: string, minLength: 8 }
             password_confirmation: { type: string }

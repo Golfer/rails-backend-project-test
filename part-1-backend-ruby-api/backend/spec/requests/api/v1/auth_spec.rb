@@ -24,6 +24,44 @@ RSpec.describe "Api::V1::Auth", type: :request do
       expect(json_response["token"]).to be_present
     end
 
+    it "creates company and user when company_name is provided" do
+      params = {
+        user: {
+          company_name: "New Co",
+          email: "owner@newco.com",
+          password: "password123",
+          password_confirmation: "password123",
+          role: "admin"
+        }
+      }
+
+      expect { post request_url("/api/v1/auth/register"), params: params.to_json, headers: api_headers }
+        .to change(User, :count).by(1)
+        .and change(Company, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+      expect(json_response["user"]["email"]).to eq("owner@newco.com")
+      expect(json_response["user"]["company_id"]).to be_present
+      expect(Company.find(json_response["user"]["company_id"]).name).to eq("New Co")
+      expect(json_response["token"]).to be_present
+    end
+
+    it "returns 422 when neither company_id nor company_name provided" do
+      params = {
+        user: {
+          email: "noco@example.com",
+          password: "password123",
+          password_confirmation: "password123",
+          role: "planner"
+        }
+      }
+
+      post request_url("/api/v1/auth/register"), params: params.to_json, headers: api_headers
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(json_response["errors"]).to include(match(/company/i))
+    end
+
     it "returns 422 when password too short" do
       company = create(:company)
       params = { user: { company_id: company.id, email: "a@b.com", password: "short", password_confirmation: "short", role: "planner" } }

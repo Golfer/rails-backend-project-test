@@ -1,0 +1,593 @@
+{
+  "info": {
+    "name": "Backend API",
+    "description": "Sample requests for all API v1 endpoints. Set {{baseUrl}} (e.g. http://localhost:3000) and use Auth > Login to get a token, then set {{token}} from the response or use the collection auth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "company_id", "value": "" },
+    { "key": "user_id", "value": "" },
+    { "key": "vendor_id", "value": "" },
+    { "key": "product_sku", "value": "" },
+    { "key": "onboarding_process_id", "value": "" },
+    { "key": "onboarding_step_id", "value": "" },
+    { "key": "submission_id", "value": "" },
+    { "key": "warehouse_id", "value": "" },
+    { "key": "sales_history_id", "value": "" },
+    { "key": "sync_status_id", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register (new company)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"company_name\": \"Acme Corp\",\n    \"email\": \"planner@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"role\": \"planner\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Register (existing company)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"company_id\": \"{{company_id}}\",\n    \"email\": \"planner2@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"role\": \"planner\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"planner@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Me (current user)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "List companies",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/companies" }
+        },
+        {
+          "name": "Create company",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/companies",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company\": {\n    \"name\": \"Acme Corp\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get company",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}"
+          }
+        },
+        {
+          "name": "Update company",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company\": {\n    \"name\": \"Acme Corp Updated\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete company",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}"
+          }
+        },
+        {
+          "name": "Current onboarding step",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}/current_onboarding_step"
+          }
+        },
+        {
+          "name": "Sync progress",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}/sync_progress"
+          }
+        },
+        {
+          "name": "Onboarding step statuses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/companies/{{company_id}}/onboarding_step_statuses"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Onboarding Steps",
+      "item": [
+        {
+          "name": "List onboarding steps",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/onboarding_steps" }
+        },
+        {
+          "name": "Create onboarding step",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_steps",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_step\": {\n    \"title\": \"Configure warehouses\",\n    \"slug\": \"warehouses\",\n    \"sort_order\": 1,\n    \"category\": \"setup\",\n    \"is_active\": true,\n    \"is_mandatory\": true\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get onboarding step",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/onboarding_steps/{{onboarding_step_id}}"
+          }
+        },
+        {
+          "name": "Update onboarding step",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_steps/{{onboarding_step_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_step\": {\n    \"is_active\": false\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete onboarding step",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/onboarding_steps/{{onboarding_step_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Onboarding Processes",
+      "item": [
+        {
+          "name": "List onboarding processes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/onboarding_processes?company_id={{company_id}}"
+          }
+        },
+        {
+          "name": "Create onboarding process",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_processes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_process\": {\n    \"company_id\": \"{{company_id}}\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get onboarding process",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/onboarding_processes/{{onboarding_process_id}}"
+          }
+        },
+        {
+          "name": "Update onboarding process",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_processes/{{onboarding_process_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_process\": {\n    \"current_step_id\": 2\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete onboarding process",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/onboarding_processes/{{onboarding_process_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Onboarding Step Submissions",
+      "item": [
+        {
+          "name": "List submissions",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/onboarding_step_submissions?company_id={{company_id}}&step_id={{onboarding_step_id}}"
+          }
+        },
+        {
+          "name": "Create submission",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_step_submissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_step_submission\": {\n    \"company_id\": \"{{company_id}}\",\n    \"step_id\": 1,\n    \"status\": \"completed\",\n    \"values\": { \"days\": 63 },\n    \"completed_at\": null\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get submission",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/onboarding_step_submissions/{{submission_id}}"
+          }
+        },
+        {
+          "name": "Update submission",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/onboarding_step_submissions/{{submission_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"onboarding_step_submission\": {\n    \"status\": \"skipped\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete submission",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/onboarding_step_submissions/{{submission_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vendors",
+      "item": [
+        {
+          "name": "List vendors",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/vendors?company_id={{company_id}}"
+          }
+        },
+        {
+          "name": "Create vendor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/vendors",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor\": {\n    \"company_id\": \"{{company_id}}\",\n    \"name\": \"Supplier A\",\n    \"contact_info\": { \"phone\": \"+123\", \"email\": \"supplier@a.com\" }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get vendor",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/vendors/{{vendor_id}}"
+          }
+        },
+        {
+          "name": "Update vendor",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/vendors/{{vendor_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendor\": {\n    \"name\": \"Supplier A Updated\",\n    \"contact_info\": { \"phone\": \"+456\" }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete vendor",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/vendors/{{vendor_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Warehouses",
+      "item": [
+        {
+          "name": "List warehouses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/warehouses?company_id={{company_id}}"
+          }
+        },
+        {
+          "name": "Create warehouse",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/warehouses",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouse\": {\n    \"company_id\": \"{{company_id}}\",\n    \"name\": \"Main Warehouse\",\n    \"address\": \"123 Industrial Blvd\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get warehouse",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/warehouses/{{warehouse_id}}"
+          }
+        },
+        {
+          "name": "Update warehouse",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/warehouses/{{warehouse_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouse\": {\n    \"name\": \"Main Warehouse Updated\",\n    \"address\": \"456 New St\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete warehouse",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/warehouses/{{warehouse_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/products?company_id={{company_id}}&vendor_id={{vendor_id}}"
+          }
+        },
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/products",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product\": {\n    \"sku_id\": \"SKU-001\",\n    \"company_id\": \"{{company_id}}\",\n    \"vendor_id\": \"{{vendor_id}}\",\n    \"name\": \"Widget X\",\n    \"lead_time_days\": 14,\n    \"days_of_stock\": 30,\n    \"forecasting_days\": 90\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get product",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/products/{{product_sku}}"
+          }
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/products/{{product_sku}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product\": {\n    \"lead_time_days\": 21,\n    \"days_of_stock\": 45\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete product",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/products/{{product_sku}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales History",
+      "item": [
+        {
+          "name": "List sales history",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sales_history?product_sku={{product_sku}}"
+          }
+        },
+        {
+          "name": "Create sales history",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/sales_history",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sales_history\": {\n    \"product_sku\": \"{{product_sku}}\",\n    \"sale_date\": \"2025-02-01\",\n    \"quantity\": 100\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get sales history",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sales_history/{{sales_history_id}}"
+          }
+        },
+        {
+          "name": "Update sales history",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/sales_history/{{sales_history_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sales_history\": {\n    \"quantity\": 150\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete sales history",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/sales_history/{{sales_history_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sync Statuses",
+      "item": [
+        {
+          "name": "List sync statuses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sync_statuses?company_id={{company_id}}"
+          }
+        },
+        {
+          "name": "Create sync status",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/sync_statuses",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sync_status\": {\n    \"company_id\": \"{{company_id}}\",\n    \"entity_type\": \"Product\",\n    \"total_count\": 100,\n    \"synced_count\": 50,\n    \"is_finished\": false\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get sync status",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sync_statuses/{{sync_status_id}}"
+          }
+        },
+        {
+          "name": "Update sync status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/sync_statuses/{{sync_status_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sync_status\": {\n    \"synced_count\": 100,\n    \"is_finished\": true\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete sync status",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/sync_statuses/{{sync_status_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/users?company_id={{company_id}}"
+          }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"company_id\": \"{{company_id}}\",\n    \"email\": \"planner2@example.com\",\n    \"role\": \"planner\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get user",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/users/{{user_id}}"
+          }
+        },
+        {
+          "name": "Update user",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/users/{{user_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"role\": \"admin\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/users/{{user_id}}"
+          }
+        }
+      ]
+    }
+  ]
+}
